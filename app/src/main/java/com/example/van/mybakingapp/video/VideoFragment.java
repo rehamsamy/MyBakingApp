@@ -1,5 +1,6 @@
 package com.example.van.mybakingapp.video;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,8 +20,27 @@ import com.example.van.mybakingapp.VideoStepsActivity;
 public class VideoFragment  extends Fragment {
     private final static String TAG=VideoFragment.class.getSimpleName();
     public static String videoUrl;
+
+    OnItemClickInterface mCallback;
+    public  interface  OnItemClickInterface{
+        void onItemClick(int position,String url);
+    }
+
+
     public  VideoFragment(){
 
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (OnItemClickInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnImageClickListener");
+        }
     }
 
     @Nullable
@@ -36,19 +56,21 @@ public class VideoFragment  extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Video video=MainActivity.videos.get(position);
-
-
+//
+               Video video=MainActivity.videos.get(position);
+//
+//
                 videoUrl=video.getmVideoUrl();
                 String description=video.getmDescription();
-                Log.v(TAG,"vvvvvvvvvvvv"+videoUrl);
+//                Log.v(TAG,"vvvvvvvvvvvv"+videoUrl);
+//
+//                Intent intent=new Intent(getContext(), VideoStepsActivity.class);
+//
+//                intent.putExtra("url",videoUrl);
+//                intent.putExtra("description",description);
+//                startActivity(intent);
 
-                Intent intent=new Intent(getContext(), VideoStepsActivity.class);
-
-                intent.putExtra("url",videoUrl);
-                intent.putExtra("description",description);
-
-                startActivity(intent);
+             mCallback.onItemClick(position,description);
 
 
             }

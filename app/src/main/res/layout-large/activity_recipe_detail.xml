@@ -13,7 +13,7 @@
     android:orientation="vertical">
 
     <fragment
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="240dp"
         android:id="@+id/ingredients"
         android:name="com.example.van.mybakingapp.ingredient.IngredientFragment"
@@ -23,20 +23,27 @@
 
 
     <fragment
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:id="@+id/steps"
         android:name="com.example.van.mybakingapp.video.VideoFragment"
         ></fragment>
 
 
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"></View>
+
+
 </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         tools:context=".VideoStepsActivity"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/linear_layout_tow_pane"
+       >
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="wrap_content"
