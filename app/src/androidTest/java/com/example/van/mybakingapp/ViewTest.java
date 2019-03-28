@@ -1,5 +1,7 @@
 package com.example.van.mybakingapp;
 
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.ViewAction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -14,6 +16,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 public class ViewTest {
@@ -27,12 +30,10 @@ public class ViewTest {
 
     @Test
     public void test(){
-       onData(anything()).inAdapterView(withId(R.id.listView)).atPosition(1);
-
-     onView(withId(R.id.recipe_namee)).check(matches(withText(x)));
-
+     //  onData(anything()).inAdapterView(withId(R.id.listView)).atPosition(1);
+        onData(anything()).inAdapterView(withId(R.id.listView)).atPosition(1);
+        onView(withId(R.id.recipe_namee)).check(matches(withText(x)));
 
     }
-
 
 }

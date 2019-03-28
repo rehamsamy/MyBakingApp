@@ -80,6 +80,22 @@ public class NewAppWidget2 extends AppWidgetProvider {
     }
 
     @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        Log.e("NewAppWidget2", "in on recieve  " + intent.getAction());
+        if (intent != null) {
+            if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())) {
+
+                Log.e("NewAppWidget2", "in on update  ");
+                Intent intent1=new Intent(context,WidgetServiceIntent.class);
+                context.startService(intent1);
+                Log.e("NewAppWidget2", "in on recieve  " + intent.getAction());
+            }
+        }
+    }
+
+
+    @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
     }

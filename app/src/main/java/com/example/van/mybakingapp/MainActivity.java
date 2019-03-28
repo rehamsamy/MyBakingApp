@@ -1,10 +1,12 @@
 package com.example.van.mybakingapp;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.JsonReader;
@@ -14,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.van.mybakingapp.idlingResource.DownloaderRecipe;
+import com.example.van.mybakingapp.idlingResource.SimplingResource;
 import com.example.van.mybakingapp.ingredient.Model;
 import com.example.van.mybakingapp.utils.JsonExtractor;
 import com.example.van.mybakingapp.utils.Recipe;
@@ -30,7 +34,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements  DownloaderRecipe.CallbackInterface{
 
     public static ArrayList<Model> ingredients;
     public  static ArrayList<Video> videos;
@@ -39,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
     RecipeAdapter adapter;
    public static  ArrayList<Recipe> recipes;
    public  static int position;
+   public  static  String url;
+   private SimplingResource resource;
+
+
+   public IdlingResource getIdlingResources(){
+       if(resource==null){
+           resource=new SimplingResource();
+       }
+return resource;
+   }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recipes=new ArrayList<>();
         listView=(ListView) findViewById(R.id.listView);
-        final String url="https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+         url="https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
         //String json=getString(R.string.json);
 
@@ -64,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+                  getIdlingResources();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
                 getApplicationContext().startService(intent);
 
 
+                Intent initialUpdateIntent=new Intent(AppWidgetManager.
+                        ACTION_APPWIDGET_UPDATE);
+                //initialUpdateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
+                sendBroadcast(initialUpdateIntent);
+
+
 
             }
         });
@@ -105,6 +126,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DownloaderRecipe.downloadImage(this,MainActivity.this,resource);
+    }
+
+    @Override
+    public void onDone(ArrayList<Recipe> recipes) {
+        adapter=new RecipeAdapter(this,recipes);
+        listView.setAdapter(adapter);
+
+    }
 
     class Task extends AsyncTask<String,Void,ArrayList<Recipe>>{
 
